@@ -24,23 +24,27 @@ createdb Doricus
 `
 
 If you are not running a local postgres server or are renaming the database name to something else you will need the following environment variables to be set
+
 `
 export DB_NAME={your db name}
 export DB_PATH={your postgres path}
 `
 
 Once that is setup you can proceed with creating your database by running
+
 `
 python manage.py db upgrade
 `
 
 Additionally we need to set the Authorization variables
+
 `
 export AUTH_DOMAIN={your auth0 domain}
 export AUTH_AUDIENCE={your audience, default value is Doricus}
 `
 
 Now we are ready to run the backend locally
+
 `
 export FLASK_APP=app.py
 flask run
