@@ -11,12 +11,14 @@ This backend is meant to be accessible as an API for the frontend. CORS will onl
 ## How-to install
 The backend has been developed to be hosted mainly on a Heroku instance. Potentially we will prepare the package to be easy to deploy as a Docker container on a AWS Kubernetes cluster.
 
-To run locally you can first start with 
+To run locally you can first start with
+
 `
 pip install -r requirements.txt
 `
 
 The first step will be to setup your database using
+
 `
 createdb Doricus
 `
