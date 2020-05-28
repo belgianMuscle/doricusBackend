@@ -13,42 +13,42 @@ The backend has been developed to be hosted mainly on a Heroku instance. Potenti
 
 To run locally you can first start with
 
-`
-pip install -r requirements.txt
-`
+```
+$ pip install -r requirements.txt
+```
 
 The first step will be to setup your database using
 
-`
-createdb Doricus
-`
+```
+$ createdb Doricus
+```
 
 If you are not running a local postgres server or are renaming the database name to something else you will need the following environment variables to be set
 
-`
-export DB_NAME={your db name}
-export DB_PATH={your postgres path}
-`
+```
+$ export DB_NAME={your db name}
+$ export DB_PATH={your postgres path}
+```
 
 Once that is setup you can proceed with creating your database by running
 
-`
-python manage.py db upgrade
-`
+```
+$ python manage.py db upgrade
+```
 
 Additionally we need to set the Authorization variables
 
-`
-export AUTH_DOMAIN={your auth0 domain}
-export AUTH_AUDIENCE={your audience, default value is Doricus}
-`
+```
+$ export AUTH_DOMAIN={your auth0 domain}
+$ export AUTH_AUDIENCE={your audience, default value is Doricus}
+```
 
 Now we are ready to run the backend locally
 
-`
-export FLASK_APP=app.py
-flask run
-`
+```
+$ export FLASK_APP=app.py
+$ flask run
+```
 
 ## In Progress
 More documentation will be added soon
