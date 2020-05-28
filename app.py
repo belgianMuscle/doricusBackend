@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 from database.models import setup_db
-from auth.auth import AuthError, requires_auth
 from api.subRoutes import sub_api
 from api.apiProjects import projects_api
 
@@ -74,7 +73,6 @@ def request_not_allowed(error):
 '''
     error handler for AuthError
     error handler should conform to general task above 
-'''
 @app.errorhandler(AuthError)
 def auth_error_handler(error):
     return jsonify({
@@ -82,3 +80,4 @@ def auth_error_handler(error):
                     "error": error.status_code,
                     "message": error.error['description']
                     }), error.status_code
+'''
