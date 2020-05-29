@@ -27,7 +27,7 @@ def welcome_message():
     'content':'Welcome to the API'
     })
 
-app.register_blueprint(sub_api)
+#app.register_blueprint(sub_api)
 app.register_blueprint(projects_api)
 
 @app.errorhandler(404)

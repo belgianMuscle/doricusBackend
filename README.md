@@ -16,7 +16,6 @@ To run locally you can first start with
 ```
 $ pip install -r requirements.txt
 ```
-
 The first step will be to setup your database using
 
 ```
@@ -26,8 +25,8 @@ $ createdb Doricus
 If you are not running a local postgres server or are renaming the database name to something else you will need the following environment variables to be set
 
 ```
-$ export DB_NAME={your db name}
-$ export DB_PATH={your postgres path}
+$ export DB_NAME={your db name} (this one is only necessary for local runs, in Heroku we are already running a live instance)
+$ export DATABASE_URL={your postgres path}
 ```
 
 Once that is setup you can proceed with creating your database by running
