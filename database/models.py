@@ -9,6 +9,7 @@ database_path = os.environ.get('DB_PATH', "postgres://{}:{}@{}/{}".format(
 
 db = SQLAlchemy()
 
+
 def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -91,10 +92,22 @@ class Project(db.Model):
 
     def short(self):
         return {
+            'id': self.id,
+            'member_id': self.member_id,
+            'title': self.title,
+            'description': self.description
         }
 
     def long(self):
         return {
+            'id': self.id,
+            'member_id': self.member_id,
+            'title': self.title,
+            'description': self.description,
+            'start_date': self.start_date,
+            'proj_end_date': self.proj_end_date,
+            'act_end_date': self.act_end_date,
+            'address': self.address
         }
 
     def __repr__(self):
@@ -125,10 +138,16 @@ class ProjectMember(db.Model):
 
     def short(self):
         return {
+            'id': self.id,
+            'project_id': self.project_id,
+            'member_id': self.member_id
         }
 
     def long(self):
         return {
+            'id': self.id,
+            'project_id': self.project_id,
+            'member_id': self.member_id
         }
 
     def __repr__(self):
@@ -148,7 +167,7 @@ class Topic(db.Model):
     content = Column(String)
     visibility = Column(String)
 
-    def __init__(self, project_id, member_id, timestamp, title, type, event_date, content, visibility):
+    def __init__(self, project_id, member_id, timestamp, title, type, event_date, content, visibility="closed"):
         self.project_id = project_id
         self.member_id = member_id
         self.timestamp = timestamp
@@ -157,6 +176,46 @@ class Topic(db.Model):
         self.event_date = event_date
         self.content = content
         self.visibility = visibility
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def short(self):
+        return {
+            'id': self.id,
+            'project_id': self.project_id,
+            'member_id': self.member_id,
+            'timestamp': self.timestamp,
+            'title': self.title,
+            'type': self.type,
+            'event_date': self.event_date,
+            'content': self.content,
+            'visibility': self.content
+        }
+
+    def long(self):
+        return {
+            'id': self.id,
+            'project_id': self.project_id,
+            'member_id': self.member_id,
+            'timestamp': self.timestamp,
+            'title': self.title,
+            'type': self.type,
+            'event_date': self.event_date,
+            'content': self.content,
+            'visibility': self.content
+        }
+
+    def __repr__(self):
+        return json.dumps(self.short())
 
 
 class TopicComment(db.Model):
@@ -187,10 +246,20 @@ class TopicComment(db.Model):
 
     def short(self):
         return {
+            'id': self.id,
+            'topic_id': self.topic_id,
+            'member_id': self.member_id,
+            'timestamp': self.timestamp,
+            'content': self.content
         }
 
     def long(self):
         return {
+            'id': self.id,
+            'topic_id': self.topic_id,
+            'member_id': self.member_id,
+            'timestamp': self.timestamp,
+            'content': self.content
         }
 
     def __repr__(self):
