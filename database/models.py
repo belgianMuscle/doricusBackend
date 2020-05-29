@@ -90,11 +90,13 @@ class Project(db.Model):
     members = db.relationship('members', lazy=True, cascade="all", backref='project')
     topics = db.relationship('topics', lazy=True, cascade="all, delete-orphan", backref='project')
 
-    def __init__(self, member_id, title="", description="", start_date=getCurrentTime(), proj_end_date, act_end_date, address=""):
+    def __init__(self, member_id, title, description, start_date, proj_end_date, act_end_date, address):
         self.member_id = member_id
         self.title = title
         self.description = description
         self.start_date = start_date
+        if not start_date:
+              self.start_date = getCurrentTime()
         self.proj_end_date = proj_end_date
         self.act_end_date = act_end_date
         self.address = address
@@ -188,15 +190,19 @@ class Topic(db.Model):
     visibility = Column(String)
     comments = db.relationship('topic_comments', lazy=True, cascade="all, delete-orphan", backref='topic')
 
-    def __init__(self, project_id, member_id, timestamp=getCurrentTime(), title="", type="", event_date, content="", visibility="closed"):
+    def __init__(self, project_id, member_id, timestamp, title, type, event_date, content, visibility):
         self.project_id = project_id
         self.member_id = member_id
         self.timestamp = timestamp
+        if not timestamp:
+              self.timestamp = getCurrentTime()
         self.title = title
         self.type = type
         self.event_date = event_date
         self.content = content
         self.visibility = visibility
+        if not visibility:
+              self.visibility = "closed"
 
     def insert(self):
         db.session.add(self)
@@ -248,10 +254,12 @@ class TopicComment(db.Model):
     timestamp = Column(DateTime)
     content = Column(String)
 
-    def __init__(self, topic_id, member_id, timestamp=getCurrentTime(), content=""):
+    def __init__(self, topic_id, member_id, timestamp, content):
         self.topic_id = topic_id
         self.member_id = member_id
         self.timestamp = timestamp
+        if not timestamp:
+              self.timestamp = getCurrentTime()
         self.content = content
 
     def insert(self):
