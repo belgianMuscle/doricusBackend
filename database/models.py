@@ -42,11 +42,14 @@ class Member(db.Model):
     auth0_id = Column(String, nullable=False)
     type = Column(String)
     full_name = Column(String)
+    email = Column(String)
     projects = db.relationship('Project', lazy=True, cascade="all", backref='member')
 
-    def __init__(self, auth0_id, type=""):
+    def __init__(self, auth0_id, type="", full_name="", email=""):
         self.auth0_id = auth0_id
         self.type = type
+        self.full_name = full_name
+        self.email = email
 
     def insert(self):
         db.session.add(self)
@@ -55,6 +58,11 @@ class Member(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+    def set_data(self, data):
+        self.type = data.get('type')
+        self.full_name = data.get('full_name')
+        self.email = data.get('email')
 
     def update(self):
         db.session.commit()
@@ -88,19 +96,20 @@ class Project(db.Model):
     proj_end_date = Column(DateTime)
     act_end_date = Column(DateTime)
     address = Column(String)
-    members = db.relationship('Member', lazy=True, cascade="all", backref='project')
+    members = db.relationship('ProjectMember', lazy=True, cascade="all", backref='project')
     topics = db.relationship('Topic', lazy=True, cascade="all, delete-orphan", backref='project')
 
-    def __init__(self, member_id, title, description, start_date, proj_end_date, act_end_date, address):
+    #def __init__(self, member_id, title, description, start_date, proj_end_date, act_end_date, address):
+    def __init__(self, member_id):
         self.member_id = member_id
-        self.title = title
+        '''self.title = title
         self.description = description
         self.start_date = start_date
         if not start_date:
               self.start_date = getCurrentTime()
         self.proj_end_date = proj_end_date
         self.act_end_date = act_end_date
-        self.address = address
+        self.address = address'''
 
     def insert(self):
         db.session.add(self)

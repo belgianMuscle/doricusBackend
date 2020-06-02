@@ -6,7 +6,8 @@ from flask_cors import CORS
 
 from database.models import setup_db
 from api.subRoutes import sub_api
-#from api.apiProjects import projects_api
+from api.apiProjects import projects_api
+from api.apiMembers import members_api
 
 # create and configure the app
 app = Flask(__name__)
@@ -27,8 +28,9 @@ def welcome_message():
     'content':'Welcome to the API'
     })
 
-#app.register_blueprint(sub_api)
-#app.register_blueprint(projects_api)
+app.register_blueprint(sub_api)
+app.register_blueprint(projects_api)
+app.register_blueprint(members_api)
 
 @app.errorhandler(404)
 def not_found(error):

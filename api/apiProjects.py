@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, abort, request
 from database.models import Project, Topic, Member, ProjectMember
 from api.localpayload import payload
+from sqlalchemy.orm import lazyload
 
 projects_api = Blueprint('projects_api', __name__)
 
@@ -27,12 +28,11 @@ def get_project(project_id):
 
     member = Member.query.filter(
         Member.auth0_id == payload.get('sub', '')).one_or_none()
-    project = Project.query.get(project_id).one_or_none()
-    project.members = ProjectMember.query.with_parent(project).all()
+    project = Project.query.options(lazyload(Project.members)).get(project_id)
 
     # verify member is allowed to pick this
     # Maybe I can change this to a nested call instead...
-    if not member.id in project.members:
+    if not member.id in [ m.id for m in project.members]:
         abort(404)
 
     return jsonify({
@@ -50,9 +50,10 @@ def create_project():
         abort(403)
 
     data = request.get_json()
+    project_data = data['project']
 
-    project = Project(**data)
-    project.member_id = member.id
+    project = Project(member.id)
+    project.set_data(project_data)
     project.insert()
 
     return jsonify({
@@ -64,26 +65,26 @@ def create_project():
 @projects_api.route('/projects/<project_id>', methods=['PATCH'])
 def update_project(project_id):
     data = request.get_json()
+    project_data = data.get('project')
 
     member = Member.query.filter(
         Member.auth0_id == payload.get('sub', '')).one_or_none()
     if not member:
         abort(403)
 
-    project = Project.query.get(project_id).one_or_none()
+    project = Project.query.get(project_id)
 
     if not project:
         abort(404)
     if not project.member_id == member.id:
         abort(403)
 
-    project.set_data(data)
-
+    project.set_data(project_data)
     project.update()
 
     return jsonify({
         'success': True,
-        'route': 'Update project'
+        'project': project.long()
     })
 
 
@@ -95,7 +96,7 @@ def delete_project(project_id):
     if not member:
         abort(403)
 
-    project = Project.query.get(project_id).one_or_none()
+    project = Project.query.get(project_id)
 
     if not project:
         abort(404)
@@ -106,5 +107,5 @@ def delete_project(project_id):
 
     return jsonify({
         'success': True,
-        'route': 'Delete project'
+        'project_id': project_id
     })
