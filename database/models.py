@@ -41,6 +41,7 @@ class Member(db.Model):
     id = Column(Integer, primary_key=True)
     auth0_id = Column(String, nullable=False)
     type = Column(String)
+    full_name = Column(String)
     projects = db.relationship('Project', lazy=True, cascade="all", backref='member')
 
     def __init__(self, auth0_id, type=""):
