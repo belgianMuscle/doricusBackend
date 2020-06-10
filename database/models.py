@@ -13,12 +13,13 @@ database_path = os.environ.get('DATABASE_URL', "postgres://{}:{}@{}/{}".format(
 db = SQLAlchemy()
 
 
-def setup_db(app, database_path=database_path):
+def setup_db(app, database_path=database_path,create=False):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    # db.create_all()
+    if create:
+        db.create_all()
 
 
 def getCurrentTime():
@@ -78,6 +79,8 @@ class Member(db.Model):
         return {
             'id': self.id,
             'auth0_id': self.auth0_id,
+            'full_name': self.full_name,
+            'email': self.email,
             'type': self.type
         }
 
@@ -92,6 +95,7 @@ class Project(db.Model):
     member_id = Column(Integer, db.ForeignKey('Member.id'), nullable=False)
     title = Column(String)
     description = Column(String)
+    image_url = Column(String)
     start_date = Column(DateTime)
     proj_end_date = Column(DateTime)
     act_end_date = Column(DateTime)
@@ -122,6 +126,9 @@ class Project(db.Model):
     def set_data(self, data):
         self.title = data.get('title')
         self.description = data.get('description')
+        self.image_url = data.get('image_url')
+        if not self.image_url:
+            self.image_url = '/placeholder.png'
         self.start_date = data.get('start_date')
         self.proj_end_date = data.get('proj_end_date')
         self.act_end_date = data.get('act_end_date')
@@ -135,7 +142,8 @@ class Project(db.Model):
             'id': self.id,
             'member_id': self.member_id,
             'title': self.title,
-            'description': self.description
+            'description': self.description,
+            'image_url':self.image_url
         }
 
     def long(self):
@@ -144,6 +152,7 @@ class Project(db.Model):
             'member_id': self.member_id,
             'title': self.title,
             'description': self.description,
+            'image_url':self.image_url,
             'start_date': self.start_date,
             'proj_end_date': self.proj_end_date,
             'act_end_date': self.act_end_date,
@@ -256,7 +265,8 @@ class Topic(db.Model):
             'type': self.type,
             'event_date': self.event_date,
             'content': self.content,
-            'visibility': self.content
+            'visibility': self.content,
+            'comments': [c.long() for c in self.comments]
         }
 
     def __repr__(self):

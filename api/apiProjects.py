@@ -1,30 +1,40 @@
 from flask import Blueprint, jsonify, abort, request
-from database.models import Project, Topic, Member, ProjectMember
-from api.localpayload import payload
+from database.models import Project, Topic, Member, ProjectMember, getCurrentTime
+from auth.auth import requires_auth
 from sqlalchemy.orm import lazyload
 
 projects_api = Blueprint('projects_api', __name__)
 
 
 @projects_api.route("/projects", methods=['GET'])
-def get_projects():
+@requires_auth('get:projects')
+def get_projects(payload):
 
-    member = Member.query.filter(
-        Member.auth0_id == payload.get('sub', '')).one_or_none()
+    #get auth0
+    auth_id = payload.get('sub', '')
+    #get member from auth
+    member = Member.query.filter(Member.auth0_id == auth_id).one_or_none()
 
     if member:
         member.projects = Project.query.with_parent(member).all()
-        projects = [p.long() for p in member.projects]
+        openProjects = [p.long() for p in member.projects if p.act_end_date > getCurrentTime()]
+        closedProjects = [p.long() for p in member.projects if p.act_end_date <= getCurrentTime()]
+
         return jsonify({
             'success': True,
-            'projects': projects
+            'openProjects': openProjects,
+            'closedProjects': closedProjects,
+            'openProjectCount': len(openProjects),
+            'closedProjectCount': len(closedProjects)
+
         })
     else:
         abort(404)
 
 
 @projects_api.route('/projects/<project_id>', methods=['GET'])
-def get_project(project_id):
+@requires_auth('get:projects')
+def get_project(payload, project_id):
 
     member = Member.query.filter(
         Member.auth0_id == payload.get('sub', '')).one_or_none()
@@ -32,17 +42,23 @@ def get_project(project_id):
 
     # verify member is allowed to pick this
     # Maybe I can change this to a nested call instead...
-    if not member.id in [ m.id for m in project.members]:
+    if not member.id in [ m.member_id for m in project.members]:
         abort(404)
+
+    topics = Topic.query.options(lazyload(Topic.comments)).with_parent(project).all()
+
+    output_project = project.long()
+    output_project['topics'] = [p.long() for p in topics]
 
     return jsonify({
         'success': True,
-        'project': project.long()
+        'project': output_project
     })
 
 
 @projects_api.route('/projects', methods=['POST'])
-def create_project():
+@requires_auth('post:projects')
+def create_project(payload):
 
     member = Member.query.filter(
         Member.auth0_id == payload.get('sub', '')).one_or_none()
@@ -63,7 +79,8 @@ def create_project():
 
 
 @projects_api.route('/projects/<project_id>', methods=['PATCH'])
-def update_project(project_id):
+@requires_auth('patch:projects')
+def update_project(payload, project_id):
     data = request.get_json()
     project_data = data.get('project')
 
@@ -89,7 +106,8 @@ def update_project(project_id):
 
 
 @projects_api.route('/projects/<project_id>', methods=['DELETE'])
-def delete_project(project_id):
+@requires_auth('delete:projects')
+def delete_project(payload, project_id):
 
     member = Member.query.filter(
         Member.auth0_id == payload.get('sub', '')).one_or_none()

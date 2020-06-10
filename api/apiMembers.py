@@ -1,28 +1,36 @@
 from flask import Blueprint, jsonify, abort, request
 from database.models import Member
-from api.localpayload import payload
+from auth.auth import requires_auth
 
 members_api = Blueprint('members_api', __name__)
 
-@members_api.route('/members/<member_id>', methods=['GET'])
-def get_member(member_id):
+@members_api.route('/members', methods=['GET'])
+@requires_auth('get:account')
+def get_member(payload):
 
-    member = Member.query.get(member_id)
+    #get auth0
+    auth_id = payload.get('sub', '')
+    #get Member id from JWT
+    member = Member.query.filter(Member.auth0_id == auth_id).one_or_none()
 
     if not member:
         abort(404)
 
-    if not member.auth0_id == payload.get('sub', ''):
+    if not member.auth0_id == auth_id:
         abort(403)
+
+    member = member.long()
+    member['permissions'] = payload.get('permissions',[])
 
     return jsonify({
         'success': True,
-        'member': member.long()
+        'member': member
     })
 
 
 @members_api.route('/members', methods=['POST'])
-def create_member():
+@requires_auth('post:account')
+def create_member(payload):
 
     data = request.get_json()
     member_data = data.get('member')
@@ -50,7 +58,8 @@ def create_member():
 
 
 @members_api.route('/members/<member_id>', methods=['PATCH'])
-def update_member(member_id):
+@requires_auth('patch:account')
+def update_member(payload, member_id):
 
     member = Member.query.get(member_id)
     if not member:

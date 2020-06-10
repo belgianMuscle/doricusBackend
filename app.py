@@ -1,14 +1,42 @@
 import os
+import logging
 
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 from database.models import setup_db
+
+from auth.auth import AuthError
+
 from api.apiProjects import projects_api
 from api.apiMembers import members_api
 from api.apiTopics import topics_api
 from api.apiTopicComments import topiccomments_api
+
+FRONTEND_ORIGIN = os.environ.get('FRONTEND_ORIGIN','')
+LOG_LEVEL = os.environ.get('LOG_LEVEL', 'DEBUG')
+
+def _logger():
+    '''
+    Setup logger format, level, and handler.
+
+    RETURNS: log object
+    '''
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    log = logging.getLogger(__name__)
+    log.setLevel(LOG_LEVEL)
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+
+    log.addHandler(stream_handler)
+    return log
+
+
+LOG = _logger()
+LOG.debug("Starting with log level: %s" % LOG_LEVEL )
 
 # create and configure the app
 app = Flask(__name__)
@@ -18,12 +46,24 @@ CORS(app)
 # CORS Headers
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    white_origin= ['https://doricus-frontend.herokuapp.com','http://localhost:3000','http://localhost:5000','http://127.0.0.1:5050','localhost']
+    #if request.headers['Origin'] in white_origin:
+    try:
+        origin = request.headers['Origin']
+    except:
+        origin = request.headers['Host']
+
+    print('Origin: {}'.format(origin))
+
+    if origin in white_origin:
+        response.headers['Access-Control-Allow-Origin'] = origin 
+        response.headers['Access-Control-Allow-Methods'] = 'GET,POST,DELETE,PATCH'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization,true'
     return response
 
 @app.route('/')
 def welcome_message():
+    
     return jsonify({
     'success':True,
     'content':'Welcome to the API'
@@ -77,6 +117,7 @@ def request_not_allowed(error):
 '''
     error handler for AuthError
     error handler should conform to general task above 
+'''
 @app.errorhandler(AuthError)
 def auth_error_handler(error):
     return jsonify({
@@ -84,4 +125,3 @@ def auth_error_handler(error):
                     "error": error.status_code,
                     "message": error.error['description']
                     }), error.status_code
-'''
