@@ -106,6 +106,7 @@ def verify_decode_jwt(token):
     unverified_header = jwt.get_unverified_header(token)
     rsa_key = {}
 
+    print(jwks)
     print(unverified_header)
     print(token)
 
