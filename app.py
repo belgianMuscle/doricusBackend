@@ -46,7 +46,7 @@ CORS(app)
 # CORS Headers
 @app.after_request
 def after_request(response):
-    white_origin= ['https://doricus-frontend.herokuapp.com','http://localhost:3000','http://localhost:5000','http://127.0.0.1:5050','localhost']
+    white_origin= ['https://doricus.herokuapp.com','doricus-backend.herokuapp.com','https://doricus-backend.herokuapp.com','http://localhost:3000','http://localhost:5000','http://127.0.0.1:5050','localhost']
     #if request.headers['Origin'] in white_origin:
     try:
         origin = request.headers['Origin']
