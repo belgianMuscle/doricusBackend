@@ -10,7 +10,7 @@ from jose import jwt
 AUTH0_DOMAIN = os.environ.get('AUTH_DOMAIN', 'belgianmuscle.auth0.com')
 ALGORITHMS = ['RS256']
 API_AUDIENCE = os.environ.get('AUTH_AUDIENCE', 'https://doricus.heroku.com/')
-AUTH0_SECRET = os.environ.get('AUTH_SECRET')
+AUTH0_SECRET = os.environ.get('AUTH_SECRET','bFY8UIwp-teDwRhdrNn1dc25tiAw2JZdWy8Ze8OyVbzQjUBXDKO3b5RuBsJi4gf1')
 
 ## AuthError Exception
 '''
@@ -129,6 +129,7 @@ def verify_decode_jwt(token):
                 'n': key['n'],
                 'e': key['e']
             }
+
     if not rsa_key:
         rsa_key = AUTH0_SECRET
 
