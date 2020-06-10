@@ -100,6 +100,7 @@ def unprocessable(error):
  
 @app.errorhandler(400)
 def bad_request(error):
+    print('General Bad Request')
     return jsonify({
         'success':False,
         'message':'Bad reqeust',
@@ -120,6 +121,7 @@ def request_not_allowed(error):
 '''
 @app.errorhandler(AuthError)
 def auth_error_handler(error):
+    print('Auth issue')
     return jsonify({
                     "success": False, 
                     "error": error.status_code,
