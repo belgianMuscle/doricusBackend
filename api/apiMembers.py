@@ -14,7 +14,10 @@ def get_member(payload):
     member = Member.query.filter(Member.auth0_id == auth_id).one_or_none()
 
     if not member:
-        abort(404)
+        return jsonify({
+            'success': False,
+            'member': {}
+        })
 
     if not member.auth0_id == auth_id:
         abort(403)
