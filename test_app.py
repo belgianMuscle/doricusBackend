@@ -14,6 +14,7 @@ class DoricusTestCases(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = app.app
         self.client = self.app.test_client
+        self.database_path = 'sqlite:///database.db'
         #self.database_name = "Doricus_test"
         #self.database_path = "postgres://{}:{}@{}/{}".format('postgres', 'udacity','localhost:5432', self.database_name)
         #setup_db(self.app, self.database_path, True)
