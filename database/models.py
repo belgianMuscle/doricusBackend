@@ -1,5 +1,6 @@
 import os
 import json
+from datetime import datetime
 import datetime
 import dateutil
 import babel
@@ -133,9 +134,9 @@ class Project(db.Model):
         self.image_url = data.get('image_url')
         if not self.image_url:
             self.image_url = '/placeholder.png'
-        self.start_date = data.get('start_date')
-        self.proj_end_date = data.get('proj_end_date')
-        self.act_end_date = data.get('act_end_date')
+        self.start_date = datetime.datetime.strptime(data.get('start_date'),'%Y-%m-%d %H:%M:%S')
+        self.proj_end_date = datetime.datetime.strptime(data.get('proj_end_date'),'%Y-%m-%d %H:%M:%S')
+        self.act_end_date = datetime.datetime.strptime(data.get('act_end_date'),'%Y-%m-%d %H:%M:%S')
         self.address = data.get('address')
 
     def update(self):

@@ -9,12 +9,11 @@ projects_api = Blueprint('projects_api', __name__)
 @projects_api.route("/projects", methods=['GET'])
 @requires_auth('get:projects')
 def get_projects(payload):
-
     #get auth0
     auth_id = payload.get('sub', '')
     #get member from auth
     member = Member.query.filter(Member.auth0_id == auth_id).one_or_none()
-
+    
     if member:
         member.projects = Project.query.with_parent(member).all()
         openProjects = [p.long() for p in member.projects if p.act_end_date > getCurrentTime()]

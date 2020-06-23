@@ -53,8 +53,6 @@ def after_request(response):
     except:
         origin = request.headers['Host']
 
-    print('Origin: {}'.format(origin))
-
     if origin in white_origin:
         response.headers['Access-Control-Allow-Origin'] = origin 
         response.headers['Access-Control-Allow-Methods'] = 'GET,POST,DELETE,PATCH'

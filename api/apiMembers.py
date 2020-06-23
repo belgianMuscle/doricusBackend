@@ -37,6 +37,14 @@ def get_member(payload):
 def create_member(payload):
 
     data = request.get_json()
+
+    if not data:
+        return jsonify({
+            'success': False,
+            'message': 'No account data provided'
+        })
+
+
     member_data = data.get('member')
 
     if not member_data:
