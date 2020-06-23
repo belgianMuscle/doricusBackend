@@ -49,6 +49,82 @@ $ export FLASK_APP=app.py
 $ flask run
 ```
 
-## In Progress
-More documentation will be added soon
-You will be able to expect all API's to be documented
+## API Documentation
+
+### Members
+#### GET '/members'
+```
+- Fetches the current member's information based on the authenticated user
+- Request arguments: None
+- Request headers: Authorization token
+- Returns an object with a success field and a field containing the member data
+- If the request gets an invalid authorization header, the result will be an empty member in the response and a False success value.
+- If the member does not align with the appropriate Authentication user id, the request will return a HTTP 403 error
+{ 
+    'success':True,
+    'member':{}
+}
+```
+
+#### POST '/members'
+```
+- This operation creates a new member record for the supplied authorization header
+- Validations: 
+    - Check if request data is provided
+    - Check if Authorization id is provided
+- Request arguments: None
+- Request headers: Authorization token, json body with member data
+- Request data:
+{ 
+    'member':{}
+}
+- Returns the created member object
+{ 
+    'success':True,
+    'member':{}
+}
+```
+
+#### PATCH '/members/<member_id>'
+```
+- This operation updates an existing member
+- Validations:
+    - Check if member with request argument exists
+    - Check if request data is provided
+    - Check if Authorization id is provided
+- Request arguments: member id
+- Request headers: Authorization token, json body with member data
+- Request data:
+{ 
+    'member':{}
+}
+- Returns the created member object
+{ 
+    'success':True,
+    'member':{}
+}
+```
+
+### Projects
+#### GET '/projects'
+```
+
+```
+
+
+### Error Codes
+
+- 404: Resource not found
+- 405: Method not allowed
+- 422: Resrouce cannot be processed
+- 400: Bad request
+- 500: Request not allowed
+
+## Testing
+To run the tests, run
+```
+dropdb trivia_test
+createdb trivia_test
+psql trivia_test < trivia.psql
+python test_flaskr.py
+```
