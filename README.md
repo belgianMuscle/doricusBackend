@@ -314,6 +314,48 @@ $ flask run
 }
 ```
 
+### Roles and Permissions
+#### Architect
+The architect role is the most complete role of all, it contains all of the actions to deal with the projects and topics
+Permissions for the role:
+- delete:projects	Remove projects	
+- delete:topics	Remove topics	
+- get:account	Get Account info	
+- get:comments	Read comments on topic	
+- get:projects	Read projects	
+- get:topics	Read topics	
+- patch:account	Update account info	
+- patch:projects	Update projects	
+- patch:topics	Update topics	
+- post:account	Create account info
+- post:comments	Create comments	
+- post:projects	Create projects	
+- post:topics	Create topics
+
+#### Builder
+The builder role is the second level in the applicaiton, it helps support the architect role so both can communicate
+Permissions for the role:
+- delete:topics	    Remove topics	
+- get:account	    Get Account info	
+- get:comments	    Read comments on topic	
+- get:projects	    Read projects	
+- get:topics	    Read topics	
+- patch:account	    Update account info	
+- patch:topics	    Update topics	
+- post:account	    Create account info	
+- post:comments	    Create comments	
+- post:topics	    Create topics
+
+#### Customer
+The customer role is basicaly more like an observer role and gives the user the opportunity to view the assigned projects and open topics
+Permissions for the role:
+- get:account	    Get Account info
+- patch:account	    Update account info
+- post:account	    Create account info
+- get:projects	    Read projects
+- get:topics	    Read topics
+- post:comments     Create comments
+- get:comments	    Read comments on topic
 
 ### Error Codes
 
@@ -326,8 +368,8 @@ $ flask run
 ## Testing
 To run the tests, run
 ```
-dropdb trivia_test
-createdb trivia_test
-psql trivia_test < trivia.psql
-python test_flaskr.py
+dropdb doricus_test
+createdb doricus_test
+psql doricus_test < doricus_test.psql
+python test_app.py
 ```
