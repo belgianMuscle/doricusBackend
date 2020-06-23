@@ -1,6 +1,8 @@
+import http.client
+import json
 from flask import Blueprint, jsonify, abort, request
 from database.models import Member
-from auth.auth import requires_auth
+from auth.auth import requires_auth, AUTH0_SECRET, AUTH0_DOMAIN, AUTH0_CLIENT, AUTH0_AUDIENCE
 
 members_api = Blueprint('members_api', __name__)
 
@@ -63,6 +65,8 @@ def create_member(payload):
     member = Member(**member_data)
     member.insert()
 
+    update_auth_role(member_data['auth0_id'],member_data["type"])
+
     return jsonify({
         'success': True,
         'member': member.long()
@@ -92,7 +96,63 @@ def update_member(payload, member_id):
     member.set_data(member_data)
     member.update()
 
+    update_auth_role(member.auth0_id,member_data["type"])
+
     return jsonify({
         'success': True,
         'member': member.long()
     })
+
+
+def update_auth_role(user_id, role):
+    try:
+        conn = http.client.HTTPSConnection("belgianmuscle.auth0.com")
+
+        payload = '{"client_id":"'+ AUTH0_CLIENT +'","client_secret":"'+ AUTH0_SECRET +'","audience":"'+ AUTH0_AUDIENCE +'","grant_type":"client_credentials"}'
+
+        headers = { 'content-type': "application/json" }
+        conn.request("POST", "/oauth/token", payload, headers)
+
+        res = conn.getresponse()
+        data = res.read()
+        dec_data = json.loads(data.decode("utf-8"))
+
+        client_token = "bearer " + dec_data['access_token']
+        headers = { 'content-type': "application/json", 'Authorization':client_token }
+
+        idata = {
+            "roles":[
+                "rol_v1f1j1bD6wB03ZGC",
+                "rol_w0K2WSAOH7ODeNhX",
+                "rol_XyfDRM6MLOEvlZS3"
+            ]
+        }
+
+        idata = json.dumps(idata)
+
+        url = "/api/v2/users/" + user_id + "/roles"
+        
+        conn.request("DELETE", url, idata, headers)
+        res = conn.getresponse()
+        print(res.read().decode())
+
+        role_id = ''
+        if role=='ARCHITECT':
+            role_id = "rol_v1f1j1bD6wB03ZGC"
+        elif role=='BUILDER':
+            role_id = "rol_w0K2WSAOH7ODeNhX"
+        elif role=='CUSTOMER':
+            role_id = "rol_XyfDRM6MLOEvlZS3"
+
+        idata = {
+            "roles":[
+                role_id
+            ]
+        }
+        idata = json.dumps(idata)
+
+        conn.request("POST", url, idata, headers)
+        res = conn.getresponse()
+        print(res.read().decode())
+    except:
+        print("Issue with Role Assignment")

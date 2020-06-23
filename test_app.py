@@ -107,7 +107,7 @@ class DoricusTestCases(unittest.TestCase):
             'member': {
                 'full_name': 'Test Updated',
                 'email': 'test@test.com',
-                'type': 'ARCHITECT'
+                'type': 'BUILDER'
             }
         }
 
@@ -134,6 +134,26 @@ class DoricusTestCases(unittest.TestCase):
         res = self.client().patch('/members/99',data=json.dumps(idata), headers={'Authorization': JWT,'Content-Type': 'application/json'})
 
         self.assertEqual(res.status_code, 404)
+
+    #
+    # Update Account
+    #
+    def test_5_4_update_account_back_to_arch(self):
+        print('Running test 1')
+        idata = {
+            'member': {
+                'full_name': 'Test Updated',
+                'email': 'test@test.com',
+                'type': 'ARCHITECT'
+            }
+        }
+
+        res = self.client().patch('/members/1',data=json.dumps(idata), headers={'Authorization': JWT,'Content-Type': 'application/json'})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['member'])
 
     #
     # Create a new project 
@@ -423,6 +443,9 @@ def suite():
     suite.addTest(DoricusTestCases('test_3_create_account_wo_auth'))
     suite.addTest(DoricusTestCases('test_4_get_account'))
     suite.addTest(DoricusTestCases('test_5_get_account_wo_auth'))
+    suite.addTest(DoricusTestCases('test_5_2_update_account'))
+    suite.addTest(DoricusTestCases('test_5_3_update_wrong_account'))
+    suite.addTest(DoricusTestCases('test_5_4_update_account_back_to_arch'))
     suite.addTest(DoricusTestCases('test_6_create_project'))
     suite.addTest(DoricusTestCases('test_7_create_project_wo_data'))
     suite.addTest(DoricusTestCases('test_8_update_project'))
