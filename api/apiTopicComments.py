@@ -21,7 +21,7 @@ def create_comment(payload, project_id, topic_id):
 
     topic = Topic.query.get(topic_id)
     if not topic:
-        abort(403)
+        abort(404)
 
     member = Member.query.options(lazyload(Member.projects)).filter(
         Member.auth0_id == payload.get('sub', '')).one_or_none()
@@ -32,7 +32,7 @@ def create_comment(payload, project_id, topic_id):
     project = Project.query.options(lazyload(Project.members)).get(project_id)
 
     if not project:
-        abort(403)
+        abort(404)
     
     if not member.id in [m.member_id for m in project.members]:
         abort(403)

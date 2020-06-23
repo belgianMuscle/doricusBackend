@@ -39,10 +39,13 @@ def get_project(payload, project_id):
         Member.auth0_id == payload.get('sub', '')).one_or_none()
     project = Project.query.options(lazyload(Project.members)).get(project_id)
 
+    if not project:
+        abort(404)
+
     # verify member is allowed to pick this
     # Maybe I can change this to a nested call instead...
     if not member.id in [ m.member_id for m in project.members]:
-        abort(404)
+        abort(403)
 
     topics = Topic.query.options(lazyload(Topic.comments)).with_parent(project).all()
 
@@ -73,6 +76,9 @@ def create_project(payload):
     project = Project(member.id)
     project.set_data(project_data)
     project.insert()
+
+    pm = ProjectMember(project.id,member.id)
+    pm.insert()
 
     return jsonify({
         'success': True,

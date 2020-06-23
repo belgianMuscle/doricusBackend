@@ -1,4 +1,0 @@
-
-INSERT INTO "public"."members" ("id", "auth0_id", "type") VALUES ('1', '1', 'Architect');
-INSERT INTO "public"."members" ("id", "auth0_id", "type") VALUES ('2', '2', 'Builder');
-INSERT INTO "public"."members" ("id", "auth0_id", "type") VALUES ('3', '3', 'Customer');

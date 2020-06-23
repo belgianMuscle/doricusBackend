@@ -226,16 +226,20 @@ class Topic(db.Model):
     def __init__(self, project_id, member_id, timestamp, title, type, event_date, content, visibility):
         self.project_id = project_id
         self.member_id = member_id
+        #self.timestamp = datetime.datetime.strptime(timestamp,'%Y-%m-%d %H:%M:%S')
         self.timestamp = timestamp
         if not timestamp:
             self.timestamp = getCurrentTime()
         self.title = title
         self.type = type
         self.event_date = event_date
+        #self.event_date = datetime.datetime.strptime(event_date,'%Y-%m-%d %H:%M:%S')
+        if not event_date:
+            self.event_date = getCurrentTime()
         self.content = content
         self.visibility = visibility
         if not visibility:
-            self.visibility = "closed"
+            self.visibility = "CLOSED"
 
     def insert(self):
         db.session.add(self)
@@ -291,6 +295,7 @@ class TopicComment(db.Model):
     def __init__(self, topic_id, member_id, timestamp, content):
         self.topic_id = topic_id
         self.member_id = member_id
+        #self.timestamp = datetime.datetime.strptime(timestamp,'%Y-%m-%d %H:%M:%S')
         self.timestamp = timestamp
         if not timestamp:
             self.timestamp = getCurrentTime()

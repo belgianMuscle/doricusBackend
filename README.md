@@ -525,10 +525,12 @@ Permissions for the role:
 - 500: Request not allowed
 
 ## Testing
-To run the tests, run
+To run the tests, first generate an Authorization token. 
+The Authorization token needs to be saved as an environment variable like follows:
 ```
-dropdb doricus_test
-createdb doricus_test
-psql doricus_test < doricus_test.psql
+export TEST_JWT="bearer {token}"
+```
+With this token, you can now run the tests.
+```
 python test_app.py
 ```

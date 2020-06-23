@@ -104,6 +104,9 @@ def delete_topic(payload, topic_id):
 
     topic = Topic.query.get(topic_id)
 
+    if not topic:
+        abort(404)
+
     member = Member.query.filter(
         Member.auth0_id == payload.get('sub', '')).one_or_none()
 
