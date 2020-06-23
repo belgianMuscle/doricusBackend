@@ -8,6 +8,9 @@ Additionally we are using Auth0 for authentication and role based permissions.
 
 This backend is meant to be accessible as an API for the frontend. CORS will only be available to the appropriate resources.
 
+### Motivation
+The motivation of this project is to help my partner who is an Architect to communicate with her contractors and customers. While there are many options out for communication of random topics, this project was intended to provide a more specialized platform to facilitate this communication.
+
 ## How-to install
 The backend has been developed to be hosted mainly on a Heroku instance. Potentially we will prepare the package to be easy to deploy as a Docker container on a AWS Kubernetes cluster.
 
@@ -55,6 +58,13 @@ Along with the regular instance configuration, the following environment variabl
 - AUTH_AUDIENCE
 - AUTH_DOMAIN
 - DATABASE_URL (automatically set by Heroku postgresql add-on package)
+
+## Current Deployment
+The current version of the project is hosted through Heroku on url:
+```
+https://doricus-backend.herokuapp.com/
+```
+
 
 ## API Documentation
 
