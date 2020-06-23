@@ -49,6 +49,13 @@ $ export FLASK_APP=app.py
 $ flask run
 ```
 
+## Deployment
+This project has been built to be deployed on Heroku as a Python app. The project needs the postgresql add-on to be installed on the instance as well.
+Along with the regular instance configuration, the following environment variables need to be configured:
+- AUTH_AUDIENCE
+- AUTH_DOMAIN
+- DATABASE_URL (automatically set by Heroku postgresql add-on package)
+
 ## API Documentation
 
 ### Members
