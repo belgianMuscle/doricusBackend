@@ -4,13 +4,14 @@ from auth.auth import requires_auth
 
 members_api = Blueprint('members_api', __name__)
 
+
 @members_api.route('/members', methods=['GET'])
 @requires_auth('get:account')
 def get_member(payload):
 
-    #get auth0
+    # get auth0
     auth_id = payload.get('sub', '')
-    #get Member id from JWT
+    # get Member id from JWT
     member = Member.query.filter(Member.auth0_id == auth_id).one_or_none()
 
     if not member:
@@ -23,7 +24,7 @@ def get_member(payload):
         abort(403)
 
     member = member.long()
-    member['permissions'] = payload.get('permissions',[])
+    member['permissions'] = payload.get('permissions', [])
 
     return jsonify({
         'success': True,

@@ -80,7 +80,13 @@ https://doricus-backend.herokuapp.com/
 - If the member does not align with the appropriate Authentication user id, the request will return a HTTP 403 error
 { 
     'success':True,
-    'member':{}
+    'member':{
+        'id':0,
+        'auth0_id':'',
+        'full_name':'',
+        'email':'',
+        'type':''
+    }
 }
 ```
 
@@ -95,12 +101,22 @@ https://doricus-backend.herokuapp.com/
 - Request headers: Authorization token, json body with member data
 - Request data:
 { 
-    'member':{}
+    'member':{
+        'full_name':'',
+        'email':'',
+        'type':''
+    }
 }
 - Returns the created member object
 { 
     'success':True,
-    'member':{}
+    'member':{
+        'id':0,
+        'auth0_id':'',
+        'full_name':'',
+        'email':'',
+        'type':''
+    }
 }
 ```
 
@@ -116,12 +132,22 @@ https://doricus-backend.herokuapp.com/
 - Request headers: Authorization token, json body with member data
 - Request data:
 { 
-    'member':{}
+    'member':{
+        'full_name':'',
+        'email':'',
+        'type':''
+    }
 }
 - Returns the created member object
 { 
     'success':True,
-    'member':{}
+    'member':{
+        'id':0,
+        'auth0_id':'',
+        'full_name':'',
+        'email':'',
+        'type':''
+    }
 }
 ```
 
@@ -138,8 +164,28 @@ https://doricus-backend.herokuapp.com/
 - Response data: the request returns an object in which 2 lists of projects are provided along with the counts for each list. Each list will contain objects of each project either still open or closed based on the end date of the project.
 {
     'success':True,
-    'openProjects': [],
-    'closedProjects':[],
+    'openProjects': [{
+        'id': '',
+        'member_id': '',
+        'title': '',
+        'description': '',
+        'image_url': '',
+        'start_date': '',
+        'proj_end_date': '',
+        'act_end_date': '',
+        'address': ''
+    }],
+    'closedProjects':[{
+        'id': '',
+        'member_id': '',
+        'title': '',
+        'description': '',
+        'image_url': '',
+        'start_date': '',
+        'proj_end_date': '',
+        'act_end_date': '',
+        'address': ''
+    }],
     'openProjectCount':0,
     'closedProjectCount':0
 }
@@ -157,7 +203,18 @@ https://doricus-backend.herokuapp.com/
 - Response data: the request returns a full project object along with all the topics and comments of the project
 {
     'success':True,
-    'project':{}
+    'project':{
+        'id': '',
+        'member_id': '',
+        'title': '',
+        'description': '',
+        'image_url': '',
+        'start_date': '',
+        'proj_end_date': '',
+        'act_end_date': '',
+        'address': ''
+        'topics':[]
+    }
 }
 ```
 
@@ -173,12 +230,30 @@ https://doricus-backend.herokuapp.com/
 - Request headers: Authorization token
 - Request data: The operation returns the newly created project
 {
-    'project':{}
+    'project':{
+        'title': '',
+        'description': '',
+        'image_url': '',
+        'start_date': '',
+        'proj_end_date': '',
+        'act_end_date': '',
+        'address': ''
+    }
 }
 - Response data: 
 {
     'success':True,
-    'project':{}
+    'project':{
+        'id': '',
+        'member_id': '',
+        'title': '',
+        'description': '',
+        'image_url': '',
+        'start_date': '',
+        'proj_end_date': '',
+        'act_end_date': '',
+        'address': ''
+    }
 }
 ```
 
@@ -196,12 +271,30 @@ https://doricus-backend.herokuapp.com/
 - Request headers: Authorization token
 - Request data:
 {
-    'project':{}
+    'project':{
+        'title': '',
+        'description': '',
+        'image_url': '',
+        'start_date': '',
+        'proj_end_date': '',
+        'act_end_date': '',
+        'address': ''
+    }
 }
 - Response data: The response will contain the updated project
 {
     'success':True,
-    'project':{}
+    'project':{
+        'id': '',
+        'member_id': '',
+        'title': '',
+        'description': '',
+        'image_url': '',
+        'start_date': '',
+        'proj_end_date': '',
+        'act_end_date': '',
+        'address': ''
+    }
 }
 ```
 
@@ -219,8 +312,8 @@ https://doricus-backend.herokuapp.com/
 - Request headers: Authorization token
 - Response data: 
 {
-    'success':True,
-    'project_id':0
+    'success': True,
+    'project_id': 0
 }
 ```
 
@@ -239,7 +332,18 @@ https://doricus-backend.herokuapp.com/
 - Response data: The request returns an object which includes the topic object along with a list of all the comments
 {
     'success':True,
-    'topic':{}
+    'topic':{
+        'id': '',
+        'project_id': '',
+        'member_id': '',
+        'timestamp': '',
+        'title': '',
+        'type': '',
+        'event_date': '',
+        'content': '',
+        'visibility': '',
+        'comments': []
+    }
 }
 ```
 
@@ -257,12 +361,30 @@ https://doricus-backend.herokuapp.com/
 - Request headers: Authorization token
 - Request data:
 {
-    'topic':{}
+    'topic':{
+        'timestamp': '',
+        'title': '',
+        'type': '',
+        'event_date': '',
+        'content': '',
+        'visibility': ''
+    }
 }
 - Response data: The response contains the topic object that was just created
 {
     'success':True,
-    'topic':{}
+    'topic':{
+        'id': '',
+        'project_id': '',
+        'member_id': '',
+        'timestamp': '',
+        'title': '',
+        'type': '',
+        'event_date': '',
+        'content': '',
+        'visibility': '',
+        'comments': []
+    }
 }
 ```
 
@@ -285,7 +407,18 @@ https://doricus-backend.herokuapp.com/
 - Response data: The request returns the updated topic
 {
     'success':True,
-    'topic':{ }
+    'topic':{
+        'id': '',
+        'project_id': '',
+        'member_id': '',
+        'timestamp': '',
+        'title': '',
+        'type': '',
+        'event_date': '',
+        'content': '',
+        'visibility': '',
+        'comments': []
+    }
 }
 ```
 
@@ -322,12 +455,21 @@ https://doricus-backend.herokuapp.com/
 - Request headers: Authorization code
 - Request data:
 {
-    'comment':{}
+    'comment':{
+        'timestamp':'',
+        'content':''
+    }
 }
 - Response data: The response returns the newly created comment 
 {
     'success':True,
-    'comment':{}
+    'comment':{
+        'id': '',
+        'topic_id': '',
+        'member_id': '',
+        'timestamp': '',
+        'content': ''
+    }
 }
 ```
 

@@ -13,7 +13,7 @@ database_path = os.environ.get('DATABASE_URL', "postgres://{}:{}@{}/{}".format(
 db = SQLAlchemy()
 
 
-def setup_db(app, database_path=database_path,create=False):
+def setup_db(app, database_path=database_path, create=False):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
@@ -24,6 +24,7 @@ def setup_db(app, database_path=database_path,create=False):
 
 def getCurrentTime():
     return datetime.datetime.now()
+
 
 def format_datetime(value, format='medium'):
     date = dateutil.parser.parse(value)
@@ -44,7 +45,8 @@ class Member(db.Model):
     type = Column(String)
     full_name = Column(String)
     email = Column(String)
-    projects = db.relationship('Project', lazy=True, cascade="all", backref='member')
+    projects = db.relationship(
+        'Project', lazy=True, cascade="all", backref='member')
 
     def __init__(self, auth0_id, type="", full_name="", email=""):
         self.auth0_id = auth0_id
@@ -100,10 +102,12 @@ class Project(db.Model):
     proj_end_date = Column(DateTime)
     act_end_date = Column(DateTime)
     address = Column(String)
-    members = db.relationship('ProjectMember', lazy=True, cascade="all", backref='project')
-    topics = db.relationship('Topic', lazy=True, cascade="all, delete-orphan", backref='project')
+    members = db.relationship(
+        'ProjectMember', lazy=True, cascade="all", backref='project')
+    topics = db.relationship(
+        'Topic', lazy=True, cascade="all, delete-orphan", backref='project')
 
-    #def __init__(self, member_id, title, description, start_date, proj_end_date, act_end_date, address):
+    # def __init__(self, member_id, title, description, start_date, proj_end_date, act_end_date, address):
     def __init__(self, member_id):
         self.member_id = member_id
         '''self.title = title
@@ -143,7 +147,7 @@ class Project(db.Model):
             'member_id': self.member_id,
             'title': self.title,
             'description': self.description,
-            'image_url':self.image_url
+            'image_url': self.image_url
         }
 
     def long(self):
@@ -152,7 +156,7 @@ class Project(db.Model):
             'member_id': self.member_id,
             'title': self.title,
             'description': self.description,
-            'image_url':self.image_url,
+            'image_url': self.image_url,
             'start_date': self.start_date,
             'proj_end_date': self.proj_end_date,
             'act_end_date': self.act_end_date,
@@ -215,21 +219,22 @@ class Topic(db.Model):
     event_date = Column(DateTime)
     content = Column(String)
     visibility = Column(String)
-    comments = db.relationship('TopicComment', lazy=True, cascade="all, delete-orphan", backref='topic')
+    comments = db.relationship(
+        'TopicComment', lazy=True, cascade="all, delete-orphan", backref='topic')
 
     def __init__(self, project_id, member_id, timestamp, title, type, event_date, content, visibility):
         self.project_id = project_id
         self.member_id = member_id
         self.timestamp = timestamp
         if not timestamp:
-              self.timestamp = getCurrentTime()
+            self.timestamp = getCurrentTime()
         self.title = title
         self.type = type
         self.event_date = event_date
         self.content = content
         self.visibility = visibility
         if not visibility:
-              self.visibility = "closed"
+            self.visibility = "closed"
 
     def insert(self):
         db.session.add(self)
@@ -287,7 +292,7 @@ class TopicComment(db.Model):
         self.member_id = member_id
         self.timestamp = timestamp
         if not timestamp:
-              self.timestamp = getCurrentTime()
+            self.timestamp = getCurrentTime()
         self.content = content
 
     def insert(self):
