@@ -55,6 +55,7 @@ $ flask run
 #### GET '/members'
 ```
 - Fetches the current member's information based on the authenticated user
+- Request authorization: get:account
 - Request arguments: None
 - Request headers: Authorization token
 - Returns an object with a success field and a field containing the member data
@@ -72,6 +73,7 @@ $ flask run
 - Validations: 
     - Check if request data is provided
     - Check if Authorization id is provided
+- Request authorization: post:account
 - Request arguments: None
 - Request headers: Authorization token, json body with member data
 - Request data:
@@ -92,6 +94,7 @@ $ flask run
     - Check if member with request argument exists
     - Check if request data is provided
     - Check if Authorization id is provided
+- Request authorization: update:account
 - Request arguments: member id
 - Request headers: Authorization token, json body with member data
 - Request data:
@@ -108,7 +111,207 @@ $ flask run
 ### Projects
 #### GET '/projects'
 ```
+- This operation returns all the projects to which a member is attached to
+- The member is deduced from the Authorization token
+- Validations: 
+    - Check if member exists
+- Request authorization: get:projects
+- Request arguments: None
+- Request headers: Authorization token
+- Response data: the request returns an object in which 2 lists of projects are provided along with the counts for each list. Each list will contain objects of each project either still open or closed based on the end date of the project.
+{
+    'success':True,
+    'openProjects': [],
+    'closedProjects':[],
+    'openProjectCount':0,
+    'closedProjectCount':0
+}
+```
 
+#### GET '/projects/<project_id>'
+```
+- This operation returns a single project if the member is attached to it
+- The member is deduced from the Authorization token
+- Validations:
+    - Member is attached to project member list
+- Request authorization: get:projects
+- Request arguments: project id
+- Request headers: Authorization token
+- Response data: the request returns a full project object along with all the topics and comments of the project
+{
+    'success':True,
+    'project':{}
+}
+```
+
+#### POST '/projects'
+```
+- This operation 
+- The member is deduced from the Authorization token
+- Validations:
+    - Member is existing
+    - Project data is provided
+- Request authorization: post:projects
+- Request arguments: None
+- Request headers: Authorization token
+- Request data: The operation returns the newly created project
+{
+    'project':{}
+}
+- Response data: 
+{
+    'success':True,
+    'project':{}
+}
+```
+
+#### PATCH '/projects/<project_id>'
+```
+- This operation updates an existing project id with the data provided
+- This operation can only be performed by the owner of the project
+- The member is deduced from the Authorization token
+- Validations:
+    - Member exists
+    - Project id exists
+    - If the member is not the same as the project's owner
+- Request authorization: patch:projects
+- Request arguments: project id
+- Request headers: Authorization token
+- Request data:
+{
+    'project':{}
+}
+- Response data: The response will contain the updated project
+{
+    'success':True,
+    'project':{}
+}
+```
+
+#### DELETE '/projects/<project_id>'
+```
+- This operation deletes a given project
+- This operation can only be performed by the owner of the project
+- The member is deduced from the Authorization token
+- Validations:
+    - Member exists
+    - Project exists
+    - Member is project owner
+- Request authorization: delete:projects
+- Request arguments: project id
+- Request headers: Authorization token
+- Response data: 
+{
+    'success':True,
+    'project_id':0
+}
+```
+
+### Topics
+#### GET '/projects/<project_id>/topics/<topic_id>'
+```
+- This operation returns all the information of a single topic, including the comments
+- The member is deduced from the Authorization token
+- Validations:
+    - Member exists
+    - Member is attached to the project
+    - Project exists
+- Request authorization: get:topics
+- Request arguments: project id, topic id
+- Request headers: Authorization token
+- Response data: The request returns an object which includes the topic object along with a list of all the comments
+{
+    'success':True,
+    'topic':{}
+}
+```
+
+#### POST '/projects/<project_id>/topics'
+```
+- This operation creates a new topic for the given project id
+- The member is deduced from the Authorization token
+- Validations:
+    - Member exists
+    - Topic data is provided
+    - Member is attached to project
+    - Project exists
+- Request authorization: post:topics
+- Request arguments: project id
+- Request headers: Authorization token
+- Request data:
+{
+    'topic':{}
+}
+- Response data: The response contains the topic object that was just created
+{
+    'success':True,
+    'topic':{}
+}
+```
+
+#### PATCH '/topics/<topic_id>'
+```
+- This operation allows the topic owner to update the given topic's visibility
+- The member is deduced from the Authorization token
+- Validations:
+    - Member is topic owner
+    - Topic exists
+- Request authorization: patch:topics
+- Request arguments: topic id
+- Request headers: Authorization token
+- Request data:
+{
+    'topic':{
+        'visibility':''
+    }
+}
+- Response data: The request returns the updated topic
+{
+    'success':True,
+    'topic':{ }
+}
+```
+
+#### DELETE '/topics/<topic_id>'
+```
+- This operation allows the topic owner to delete the given topic
+- The member is deduced from the Authorization token
+- Validations:
+    - Member is topic owner
+    - Topic exists
+- Request authorization: delete:topics
+- Request arguments: topic id
+- Request headers: Authorization token
+- Response data: The request returns the updated topic
+{
+    'success':True,
+    'topic_id':0
+}
+```
+
+### Topic Comments
+#### POST '/projects/<project_id>/topics/<topic_id>/comments'
+```
+- This operation posts a new comment to the provided project and topic.
+- The member is deduced from the Authorization token
+- Validations:
+    - Comment data is provided
+    - Topic exists
+    - Member exists
+    - Project exists
+    - Member is attached to project
+- Request authorization: post:comments
+- Request arguments: project id, topic id
+- Request headers: Authorization code
+- Request data:
+{
+    'comment':{}
+}
+- Response data: The response returns the newly created comment 
+{
+    'success':True,
+    'comment':{}
+}
 ```
 
 
@@ -116,7 +319,7 @@ $ flask run
 
 - 404: Resource not found
 - 405: Method not allowed
-- 422: Resrouce cannot be processed
+- 422: Resource cannot be processed
 - 400: Bad request
 - 500: Request not allowed
 

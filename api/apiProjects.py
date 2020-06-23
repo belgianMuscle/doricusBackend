@@ -68,6 +68,9 @@ def create_project(payload):
     data = request.get_json()
     project_data = data['project']
 
+    if not project_data:
+        abort(400)
+
     project = Project(member.id)
     project.set_data(project_data)
     project.insert()
