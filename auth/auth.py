@@ -11,8 +11,8 @@ ALGORITHMS = ['RS256']
 API_AUDIENCE = os.environ.get('AUTH_AUDIENCE', 'https://doricus.heroku.com/')
 
 AUTH0_DOMAIN = os.environ.get('AUTH_DOMAIN', 'belgianmuscle.auth0.com')
-AUTH0_SECRET = os.environ.get('AUTH_SECRET', 'LJ4QOU5adGjdvTBuXTMhuJ0Sgx4y7mKSlS2mJyqAIr14yJ4iVYyN5N4KeAputwM8')
-AUTH0_CLIENT = os.environ.get('AUTH_CLIENT','0miVmR0oocu77A9nyqdcQmbuKMKw4OVM')
+AUTH0_SECRET = os.environ.get('AUTH_SECRET', '')
+AUTH0_CLIENT = os.environ.get('AUTH_CLIENT','')
 AUTH0_AUDIENCE = os.environ.get('AUTH0_AUDIENCE','https://belgianmuscle.auth0.com/api/v2/')
 
 ## AuthError Exception
