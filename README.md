@@ -533,12 +533,52 @@ Or by using the following parameters:
 - Auth0 Audience: https://doricus.heroku.com/
 - Auth0 Client: wDLuwFE5xkwMsZ6blZbxrBMGquv1E9tK
 
+There are 3 different Test Scenarios, one for each role. Since the role on the JWT cannot be changed on the fly while in the first test case, the tests for each Role have been split out.
+For each role a different JWT will need to be provided. Either all at the same time, or separately. Either 3 test accounts will be necessary or 1 account with the change of the role through the UI (note that the JWT will have to be refreshed to observe the role adjustment). 
+
+### Environment Variables pre-requisites
+Because we are connecting directly to Auth0 is some of the test cases, it is crucial that the appropriate environment variables be provided. 
+- AUTH_SECRET: Secret for the Machine-to-Machine credential retrieval
+- AUTH_CLIENT: Client for the Machine-to-Machine credential retrieval
+
+Without these, the tests will not succeed.
+
+
+### Architect Testing
+This test scenario is the most broad test as it this role contains all of the other roles' permissions too. 
+
 Once a token is generated (either through Curl or by viewing it in Chrome Developer Tools), you will need to pass it as an environment variable before running the unittest scripts/
 ```
-export TEST_JWT="bearer {token}"
+export TEST_ARCH_JWT="bearer {token}"
 ```
 
 With this token, you can now run the tests.
 ```
-python test_app.py
+python test_architect.py
+```
+
+### Builder Testing
+This scenario tests whether the builder is able to perform some actions that it is not allowed to do.
+
+Once a token is generated (either through Curl or by viewing it in Chrome Developer Tools), you will need to pass it as an environment variable before running the unittest scripts/
+```
+export TEST_BUILD_JWT="bearer {token}"
+```
+
+With this token, you can now run the tests.
+```
+python test_builder.py
+```
+
+### Customer Testing
+This scenario tests whether the customer is able to perform some actions that it is not allowed to do.
+
+Once a token is generated (either through Curl or by viewing it in Chrome Developer Tools), you will need to pass it as an environment variable before running the unittest scripts/
+```
+export TEST_CUST_JWT="bearer {token}"
+```
+
+With this token, you can now run the tests.
+```
+python test_customer.py
 ```

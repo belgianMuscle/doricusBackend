@@ -11,9 +11,13 @@ projects_api = Blueprint('projects_api', __name__)
 def get_projects(payload):
     #get auth0
     auth_id = payload.get('sub', '')
-    #get member from auth
-    member = Member.query.filter(Member.auth0_id == auth_id).one_or_none()
-    
+    #get member from auth    
+    try:
+        member = Member.query.filter(Member.auth0_id == auth_id).one_or_none()
+    except:
+        abort(403)
+        
+
     if member:
         member.projects = Project.query.with_parent(member).all()
         openProjects = [p.long() for p in member.projects if p.act_end_date > getCurrentTime()]
@@ -35,8 +39,12 @@ def get_projects(payload):
 @requires_auth('get:projects')
 def get_project(payload, project_id):
 
-    member = Member.query.filter(
-        Member.auth0_id == payload.get('sub', '')).one_or_none()
+    try:
+        member = Member.query.filter(
+                Member.auth0_id == payload.get('sub', '')).one_or_none()
+    except:
+        abort(403)
+
     project = Project.query.options(lazyload(Project.members)).get(project_id)
 
     if not project:
@@ -62,8 +70,12 @@ def get_project(payload, project_id):
 @requires_auth('post:projects')
 def create_project(payload):
 
-    member = Member.query.filter(
-        Member.auth0_id == payload.get('sub', '')).one_or_none()
+    try:
+        member = Member.query.filter(
+                Member.auth0_id == payload.get('sub', '')).one_or_none()
+    except:
+        abort(403)
+
     if not member:
         abort(403)
 
@@ -92,8 +104,12 @@ def update_project(payload, project_id):
     data = request.get_json()
     project_data = data.get('project')
 
-    member = Member.query.filter(
-        Member.auth0_id == payload.get('sub', '')).one_or_none()
+    try:
+        member = Member.query.filter(
+                Member.auth0_id == payload.get('sub', '')).one_or_none()
+    except:
+        abort(403)
+
     if not member:
         abort(403)
 
@@ -117,8 +133,12 @@ def update_project(payload, project_id):
 @requires_auth('delete:projects')
 def delete_project(payload, project_id):
 
-    member = Member.query.filter(
-        Member.auth0_id == payload.get('sub', '')).one_or_none()
+    try:
+        member = Member.query.filter(
+                Member.auth0_id == payload.get('sub', '')).one_or_none()
+    except:
+        abort(403)
+
     if not member:
         abort(403)
 

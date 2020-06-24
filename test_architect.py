@@ -7,15 +7,15 @@ from flask_sqlalchemy import SQLAlchemy
 import app
 from database.models import setup_db, getCurrentTime
 
-JWT = os.environ.get('TEST_JWT', {'bearer': 'test'})
+JWT = os.environ.get('TEST_ARCH_JWT', {'bearer': 'test'})
 
 
-class DoricusTestCases(unittest.TestCase):
+class DoricusArchitectTestCases(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         try:
-            os.remove('database.db')
+            os.remove('test_db_architect.db')
         except:
             print('no database file exists yet')
 
@@ -23,7 +23,7 @@ class DoricusTestCases(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = app.app
         self.client = self.app.test_client
-        self.database_path = 'sqlite:///database.db'
+        self.database_path = 'sqlite:///test_db_architect.db'
         setup_db(self.app, self.database_path, True)
 
         # binds the app to the current context

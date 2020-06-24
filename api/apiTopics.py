@@ -10,8 +10,11 @@ topics_api = Blueprint('topics_api', __name__)
 @requires_auth('get:topics')
 def get_topic(payload, project_id, topic_id):
 
-    member = Member.query.filter(
-        Member.auth0_id == payload.get('sub', '')).one_or_none()
+    try:
+        member = Member.query.filter(
+                Member.auth0_id == payload.get('sub', '')).one_or_none()
+    except:
+        abort(403)
 
     if not member:
         abort(403)
@@ -41,8 +44,11 @@ def create_topic(payload, project_id):
     if not topic_data:
         abort(405)
 
-    member = Member.query.filter(
-        Member.auth0_id == payload.get('sub', '')).one_or_none()
+    try:
+        member = Member.query.filter(
+                Member.auth0_id == payload.get('sub', '')).one_or_none()
+    except:
+        abort(403)
 
     if not member:
         abort(403)
@@ -82,8 +88,11 @@ def update_topic_visibility(payload, topic_id):
     if not topic:
         abort(404)
 
-    member = Member.query.filter(
-        Member.auth0_id == payload.get('sub', '')).one_or_none()
+    try:
+        member = Member.query.filter(
+                Member.auth0_id == payload.get('sub', '')).one_or_none()
+    except:
+        abort(403)
 
     if not member.id == topic.member_id:
         abort(403)
@@ -107,8 +116,11 @@ def delete_topic(payload, topic_id):
     if not topic:
         abort(404)
 
-    member = Member.query.filter(
-        Member.auth0_id == payload.get('sub', '')).one_or_none()
+    try:
+        member = Member.query.filter(
+                Member.auth0_id == payload.get('sub', '')).one_or_none()
+    except:
+        abort(403)
 
     if not member.id == topic.member_id:
         abort(403)

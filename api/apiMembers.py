@@ -106,7 +106,7 @@ def update_member(payload, member_id):
 
 def update_auth_role(user_id, role):
     try:
-        conn = http.client.HTTPSConnection("belgianmuscle.auth0.com")
+        conn = http.client.HTTPSConnection(AUTH0_DOMAIN)
 
         payload = '{"client_id":"'+ AUTH0_CLIENT +'","client_secret":"'+ AUTH0_SECRET +'","audience":"'+ AUTH0_AUDIENCE +'","grant_type":"client_credentials"}'
 
@@ -134,7 +134,7 @@ def update_auth_role(user_id, role):
         
         conn.request("DELETE", url, idata, headers)
         res = conn.getresponse()
-        print(res.read().decode())
+        data = res.read().decode()
 
         role_id = ''
         if role=='ARCHITECT':
@@ -153,6 +153,6 @@ def update_auth_role(user_id, role):
 
         conn.request("POST", url, idata, headers)
         res = conn.getresponse()
-        print(res.read().decode())
+        data = res.read().decode()
     except:
-        print("Issue with Role Assignment")
+        abort(500)
