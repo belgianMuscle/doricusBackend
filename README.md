@@ -525,11 +525,19 @@ Permissions for the role:
 - 500: Request not allowed
 
 ## Testing
-To run the tests, first generate an Authorization token. 
-The Authorization token needs to be saved as an environment variable like follows:
+
+To test the Live or Local application, it is important to first create an account to the application. 
+You can either do so by connecting through the live version of the app at: https://doricus.herokuapp.com 
+Or by using the following parameters:
+- Auth0 Domain: https://belgianmuscle.auth0.com
+- Auth0 Audience: https://doricus.heroku.com/
+- Auth0 Client: wDLuwFE5xkwMsZ6blZbxrBMGquv1E9tK
+
+Once a token is generated (either through Curl or by viewing it in Chrome Developer Tools), you will need to pass it as an environment variable before running the unittest scripts/
 ```
 export TEST_JWT="bearer {token}"
 ```
+
 With this token, you can now run the tests.
 ```
 python test_app.py
