@@ -108,17 +108,8 @@ class Project(db.Model):
     topics = db.relationship(
         'Topic', lazy=True, cascade="all, delete-orphan", backref='project')
 
-    # def __init__(self, member_id, title, description, start_date, proj_end_date, act_end_date, address):
     def __init__(self, member_id):
         self.member_id = member_id
-        '''self.title = title
-        self.description = description
-        self.start_date = start_date
-        if not start_date:
-              self.start_date = getCurrentTime()
-        self.proj_end_date = proj_end_date
-        self.act_end_date = act_end_date
-        self.address = address'''
 
     def insert(self):
         db.session.add(self)
@@ -134,9 +125,9 @@ class Project(db.Model):
         self.image_url = data.get('image_url')
         if not self.image_url:
             self.image_url = '/placeholder.png'
-        self.start_date = datetime.datetime.strptime(data.get('start_date'),'%Y-%m-%d %H:%M:%S')
-        self.proj_end_date = datetime.datetime.strptime(data.get('proj_end_date'),'%Y-%m-%d %H:%M:%S')
-        self.act_end_date = datetime.datetime.strptime(data.get('act_end_date'),'%Y-%m-%d %H:%M:%S')
+        self.start_date = datetime.datetime.strptime(data.get('start_date'),'%Y-%m-%d')
+        self.proj_end_date = datetime.datetime.strptime(data.get('proj_end_date'),'%Y-%m-%d')
+        self.act_end_date = datetime.datetime.strptime(data.get('act_end_date'),'%Y-%m-%d')
         self.address = data.get('address')
 
     def update(self):
@@ -226,14 +217,12 @@ class Topic(db.Model):
     def __init__(self, project_id, member_id, timestamp, title, type, event_date, content, visibility):
         self.project_id = project_id
         self.member_id = member_id
-        #self.timestamp = datetime.datetime.strptime(timestamp,'%Y-%m-%d %H:%M:%S')
         self.timestamp = timestamp
         if not timestamp:
             self.timestamp = getCurrentTime()
         self.title = title
         self.type = type
         self.event_date = event_date
-        #self.event_date = datetime.datetime.strptime(event_date,'%Y-%m-%d %H:%M:%S')
         if not event_date:
             self.event_date = getCurrentTime()
         self.content = content
@@ -295,7 +284,6 @@ class TopicComment(db.Model):
     def __init__(self, topic_id, member_id, timestamp, content):
         self.topic_id = topic_id
         self.member_id = member_id
-        #self.timestamp = datetime.datetime.strptime(timestamp,'%Y-%m-%d %H:%M:%S')
         self.timestamp = timestamp
         if not timestamp:
             self.timestamp = getCurrentTime()

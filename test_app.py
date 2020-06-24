@@ -165,9 +165,9 @@ class DoricusTestCases(unittest.TestCase):
                 'title': 'Test 1',
                 'description': 'Test Project number 1',
                 'image_url': 'http://test_url.com',
-                'start_date': '2020-01-01 10:00:00',
-                'proj_end_date': '2020-10-01 10:00:00',
-                'act_end_date': '2020-12-01 10:00:00',
+                'start_date': '2020-01-01',
+                'proj_end_date': '2020-10-01',
+                'act_end_date': '2020-12-01',
                 'address': 'Test Address'
             }
         }
@@ -202,9 +202,9 @@ class DoricusTestCases(unittest.TestCase):
                 'title': 'Test Update 1',
                 'description': 'Test Project update number 1',
                 'image_url': 'http://test_url.com',
-                'start_date': '2020-01-01 10:00:00',
-                'proj_end_date': '2020-10-01 10:00:00',
-                'act_end_date': '2020-12-01 10:00:00',
+                'start_date': '2020-01-01',
+                'proj_end_date': '2020-10-01',
+                'act_end_date': '2020-12-01',
                 'address': 'Test Address'
             }
         }
@@ -226,9 +226,9 @@ class DoricusTestCases(unittest.TestCase):
                 'title': 'Test Update 1',
                 'description': 'Test Project update number 1',
                 'image_url': 'http://test_url.com',
-                'start_date': '2020-01-01 10:00:00',
-                'proj_end_date': '2020-10-01 10:00:00',
-                'act_end_date': '2020-12-01 10:00:00',
+                'start_date': '2020-01-01',
+                'proj_end_date': '2020-10-01',
+                'act_end_date': '2020-12-01',
                 'address': 'Test Address'
             }
         }
@@ -283,7 +283,7 @@ class DoricusTestCases(unittest.TestCase):
                 'timestamp': '2020-06-22 10:00:00',
                 'title': 'First post',
                 'type': 'TEXT',
-                'event_date': '2020-01-01 00:00:00',
+                'event_date': '2020-01-01',
                 'content': 'This is the content of the topic',
                 'visibility': 'CLOSED'
             }
@@ -305,7 +305,7 @@ class DoricusTestCases(unittest.TestCase):
                 'timestamp': '2020-06-22 10:00:00',
                 'title': 'Wrong post',
                 'type': 'TEXT',
-                'event_date': '2020-01-01 00:00:00',
+                'event_date': '2020-01-01',
                 'content': 'This is the content of the topic',
                 'visibility': 'CLOSED'
             }
