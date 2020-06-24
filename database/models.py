@@ -8,11 +8,10 @@ from sqlalchemy import Column, String, Integer, DateTime, create_engine
 from flask_sqlalchemy import SQLAlchemy
 
 database_name = os.environ.get('DB_NAME', 'Doricus')
-database_path = os.environ.get('DATABASE_URL', "postgres://{}:{}@{}/{}".format(
-    'postgres', 'udacity', 'localhost:5432', database_name))
+database_path = os.environ.get('DATABASE_URL', "postgres://{}:{}@{}/{}".format('postgres', 'udacity', 'localhost:5432', database_name))
+
 
 db = SQLAlchemy()
-
 
 def setup_db(app, database_path=database_path, create=False):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
