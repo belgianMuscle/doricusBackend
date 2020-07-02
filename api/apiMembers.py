@@ -33,6 +33,26 @@ def get_member(payload):
         'member': member
     })
 
+@members_api.route('/searc/members', methods=['GET'])
+@requires_auth('search:account')
+def get_member_by_email(payload):
+
+    email = request.args.get('email')
+    if not email:
+        abort(404)
+
+    # get Member id from input email
+    member = Member.query.filter(Member.email == email).one_or_none()
+
+    if not member:
+        abort(404)
+
+    member = member.long()
+
+    return jsonify({
+        'success': True,
+        'member': member
+    })
 
 @members_api.route('/members', methods=['POST'])
 @requires_auth('post:account')
