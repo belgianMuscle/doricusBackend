@@ -142,7 +142,8 @@ def update_project(payload, project_id):
     pms = ProjectMember.query.filter(ProjectMember.project_id == project.id).all()
     for pmd in pms:
         if not pmd.member_id in [m.get('id',0) for m in project_data.get('members',[])]:
-            pmd.delete()
+            if not pmd.member_id == member.id:
+                pmd.delete()
 
     for m in project_data.get('members',[]):
         if not m.get('id') in [p.member_id for p in pms]:
