@@ -145,9 +145,9 @@ def update_project(payload, project_id):
             pmd.delete()
 
     for m in project_data.get('members',[]):
-        if not m.get('id') in [p.member_id for p in pms]
-        pm = ProjectMember(project.id,m.get('id'))
-        pm.insert()
+        if not m.get('id') in [p.member_id for p in pms]:
+            pm = ProjectMember(project.id,m.get('id'))
+            pm.insert()
 
     return jsonify({
         'success': True,
