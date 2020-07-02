@@ -33,7 +33,7 @@ def get_member(payload):
         'member': member
     })
 
-@members_api.route('/searc/members', methods=['GET'])
+@members_api.route('/search/members', methods=['GET'])
 @requires_auth('search:account')
 def get_member_by_email(payload):
 
