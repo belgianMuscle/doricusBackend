@@ -59,7 +59,11 @@ def get_project(payload, project_id):
 
     output_project = project.long()
 
-    output_project['members'] = [m.long() for m in project.members if m.id != member.id]
+    for m in project.members:
+        if m.member_id != member.id:
+            pmem = Member.query.get(m.member_id)
+            output_project['members'].append(pmem.long())
+
     if 'get:closedTopics' in payload['permissions']:
         output_project['topics'] = [p.long() for p in topics]
     else:
