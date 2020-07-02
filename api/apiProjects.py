@@ -58,7 +58,7 @@ def get_project(payload, project_id):
     topics = Topic.query.options(lazyload(Topic.comments)).with_parent(project).all()
 
     output_project = project.long()
-    if 'get:closedProjects' in payload['permissions']:
+    if 'get:closedTopics' in payload['permissions']:
         output_project['topics'] = [p.long() for p in topics]
     else:
         output_project['topics'] = [p.long() for p in topics if p.visibility=='OPEN' ]
