@@ -250,7 +250,7 @@ class Topic(db.Model):
             'type': self.type,
             'event_date': self.event_date,
             'content': self.content,
-            'visibility': self.content
+            'visibility': self.visibility
         }
 
     def long(self):
@@ -263,7 +263,7 @@ class Topic(db.Model):
             'type': self.type,
             'event_date': self.event_date,
             'content': self.content,
-            'visibility': self.content,
+            'visibility': self.visibility,
             'comments': [c.long() for c in self.comments]
         }
 
