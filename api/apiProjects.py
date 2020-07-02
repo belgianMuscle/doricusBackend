@@ -58,7 +58,7 @@ def get_project(payload, project_id):
     topics = Topic.query.options(lazyload(Topic.comments)).with_parent(project).all()
 
     output_project = project.long()
-    
+
     output_project['members'] = []
     for m in project.members:
         if m.member_id != member.id:
@@ -138,6 +138,16 @@ def update_project(payload, project_id):
 
     project.set_data(project_data)
     project.update()
+
+    pms = ProjectMember.query.filter(ProjectMember.project_id == project.id).all()
+    for pmd in pms:
+        if not pmd.member_id in [m.get('id',0) for m in project_data.get('members',[])]:
+            pmd.delete()
+
+    for m in project_data.get('members',[]):
+        if not m.get('id') in [p.member_id for p in pms]
+        pm = ProjectMember(project.id,m.get('id'))
+        pm.insert()
 
     return jsonify({
         'success': True,
