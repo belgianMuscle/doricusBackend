@@ -58,10 +58,15 @@ def get_project(payload, project_id):
     topics = Topic.query.options(lazyload(Topic.comments)).with_parent(project).all()
 
     output_project = project.long()
+
+    output_project['members'] = [m.long() for m in project.members if m.id != member.id]
     if 'get:closedTopics' in payload['permissions']:
         output_project['topics'] = [p.long() for p in topics]
     else:
         output_project['topics'] = [p.long() for p in topics if p.visibility=='OPEN' ]
+
+    
+
 
     return jsonify({
         'success': True,
