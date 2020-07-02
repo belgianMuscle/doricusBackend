@@ -58,7 +58,8 @@ def get_project(payload, project_id):
     topics = Topic.query.options(lazyload(Topic.comments)).with_parent(project).all()
 
     output_project = project.long()
-
+    
+    output_project['members'] = []
     for m in project.members:
         if m.member_id != member.id:
             pmem = Member.query.get(m.member_id)
