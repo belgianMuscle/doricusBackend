@@ -94,6 +94,9 @@ def create_project(payload):
 
     pm = ProjectMember(project.id,member.id)
     pm.insert()
+    for m in project_data.get('members',[]):
+        pm = ProjectMember(project.id,m.id)
+        pm.insert()
 
     return jsonify({
         'success': True,
